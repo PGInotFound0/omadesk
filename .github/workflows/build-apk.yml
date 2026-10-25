@@ -14,6 +14,7 @@ on:
 
 permissions:
   contents: write
+  packages: write
 
 jobs:
   build:
@@ -70,3 +71,24 @@ jobs:
           gh release create "${GITHUB_REF_NAME}" --repo "$GITHUB_REPOSITORY" \
             --title "${GITHUB_REF_NAME}" --notes "omadesk Android APK" || true
           gh release upload "${GITHUB_REF_NAME}" --repo "$GITHUB_REPOSITORY" $(find apks -name '*.apk') --clobber
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: build + push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ghcr.io/pginotfound0/omadesk:latest
+            ghcr.io/pginotfound0/omadesk:${{ github.sha }}

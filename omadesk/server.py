@@ -402,8 +402,10 @@ class DeskServer:
 
     # ------------------ desktop navigation (Hyprland) ------------------
     def _hypr(self, *args):
-        return subprocess.run(["hyprctl", *args], capture_output=True, text=True,
-                              timeout=4).stdout
+        """Snapshot data via `hyprctl` CLI or the IPC socket fallback."""
+        from omadesk import hyprctl
+
+        return hyprctl.run(" ".join(args))
 
     async def _inject_key(self, code: str, mods: dict) -> None:
         """Synthesize a press+release through the virtual keyboard thread."""

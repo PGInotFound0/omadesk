@@ -41,6 +41,24 @@ protocols directly.
 
 ## Install
 
+** easiest — Docker (recommended):**
+
+```sh
+export HYPRLAND_INSTANCE_SIGNATURE   # already set in your desktop shells
+docker run -d --name omadesk --net host \
+  -u "$(id -u):$(id -g)" -e HOME=/persist \
+  -e WAYLAND_DISPLAY=${WAYLAND_DISPLAY:-wayland-1} \
+  -e HYPRLAND_INSTANCE_SIGNATURE="$HYPRLAND_INSTANCE_SIGNATURE" \
+  -v "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}:/run/user/$(id -u):ro" \
+  -v "$HOME/.config/omadesk:/persist" \
+  ghcr.io/pginotfound0/omadesk:latest
+docker logs -f omadesk   # URL + QR appear here
+```
+
+(or clone the repo and `./docker-run.sh`, or `docker compose up -d`)
+
+**classic Python install:**
+
 ```sh
 cd ~/omadesk
 ./install.sh          # venv + deps + ~/.local/bin/omadesk
@@ -84,6 +102,35 @@ omadesk/
   scripts/            development probes and this project's e2e tests:
                       test_e2e_server.py, kb_spy.py, micro*.py, poc_*.py
 ```
+
+## 🐳 Docker install
+
+Run the server without touching your host Python (connects to your running
+Wayland session; the image is prepared on GHCR):
+
+```sh
+export HYPRLAND_INSTANCE_SIGNATURE   # it's already set in your desktop shells
+docker run -d --name omadesk --net host \
+  -u "$(id -u):$(id -g)" -e HOME=/persist \
+  -e WAYLAND_DISPLAY=${WAYLAND_DISPLAY:-wayland-1} \
+  -e HYPRLAND_INSTANCE_SIGNATURE="$HYPRLAND_INSTANCE_SIGNATURE" \
+  -v "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}:/run/user/$(id -u):ro" \
+  -v "$HOME/.config/omadesk:/persist" \
+  ghcr.io/pginotfound0/omadesk:latest
+docker logs -f omadesk          # the URL + QR print here
+docker rm -f omadesk            # to stop
+```
+
+Nicer: clone the repo and `./docker-run.sh`, or use `docker compose up -d` with the
+included `docker-compose.yml`. Notes:
+
+- `--net host` + host-uid matters: the server joins your Wayland/PipeWire/Hyprland
+  sockets, which belong to your desktop user (no root daemon involved).
+- The access token is written into `~/.config/omadesk/omadesk/token` on the host
+  (persisted via the `/persist` mount), so the printed URL/QR stays valid between
+  restarts.
+- Works on any distro with a Wayland session implementing the same protocols
+  (wlroots family — tested on Hyprland/Omarchy).
 
 ## 🤖 Building the Android APK
 

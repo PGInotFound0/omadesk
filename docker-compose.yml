@@ -1,0 +1,16 @@
+services:
+  omadesk:
+    image: ghcr.io/pginotfound0/omadesk:latest
+    container_name: omadesk
+    restart: unless-stopped
+    network_mode: host
+    user: "1000:1000"          # must match your desktop session user/uid
+    environment:
+      WAYLAND_DISPLAY: ${WAYLAND_DISPLAY:-wayland-1}
+      HYPRLAND_INSTANCE_SIGNATURE: ${HYPRLAND_INSTANCE_SIGNATURE:?export it from your session}
+      HOME: /persist
+    volumes:
+      # Wayland sockets + PulseAudio/PipeWire socket + Hyprland IPC
+      - "${XDG_RUNTIME_DIR:-/run/user/1000}:/run/user/1000:ro"
+      # token storage so the QR/URL survives container restarts
+      - "${HOME}/.config/omadesk:/persist"

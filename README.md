@@ -131,6 +131,11 @@ included `docker-compose.yml`. Notes:
   restarts.
 - Works on any distro with a Wayland session implementing the same protocols
   (wlroots family — tested on Hyprland/Omarchy).
+- **One-time package visibility:** GHCR images are private by default. To make
+  `docker pull` work without logging into ghcr, open
+  https://github.com/PGInotFound0?tab=packages → omadesk → Package settings →
+  Change visibility → Public. Otherwise: `docker login ghcr.io -u PGInotFound0` (use a
+  token with `read:packages` scope) first.
 
 ## 🤖 Building the Android APK
 

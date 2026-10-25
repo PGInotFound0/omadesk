@@ -52,11 +52,11 @@ def main() -> None:
         *inputs,
     ]
     log = subprocess.run(cmd, capture_output=True, text=True)
-    if log.returncode != 0 or not (log.stdout or "").strip():
+    if log.returncode != 0:
         sys.stderr.write(log.stdout or "")
         sys.stderr.write(log.stderr or "")
         sys.exit(f"scanner failed (rc={log.returncode})")
-    print("scanner ok:", log.stdout.strip()[-200:])
+    sys.stderr.write(log.stderr)
 
     # Generated modules do `from .wayland import WlOutput` etc, so provide a
     # shim re-exporting pywayland's own wayland bindings.

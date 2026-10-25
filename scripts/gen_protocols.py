@@ -46,12 +46,18 @@ def main() -> None:
     inputs = [
         os.path.join(XML_DIR, xml) for xml in PROTOCOLS
     ]
-    ret = os.system(
-        f"'{sys.executable}' -m pywayland.scanner -o '{OUT_DIR}' "
-        f"-i '{wayland_xml}' " + " ".join(f"'{i}'" for i in inputs)
-    )
-    if ret != 0:
-        sys.exit("scanner failed")
+    cmd = [
+        sys.executable, "-m", "pywayland.scanner",
+        "-o", OUT_DIR,
+        "-i", wayland_xml,
+        *inputs,
+    ]
+    log = subprocess.run(cmd, capture_output=True, text=True)
+    if log.returncode != 0 or not (log.stdout or "").strip():
+        sys.stderr.write(log.stdout or "")
+        sys.stderr.write(log.stderr or "")
+        sys.exit(f"scanner failed (rc={log.returncode})")
+    print("scanner ok:", log.stdout.strip()[-200:])
 
     # Generated modules do `from .wayland import WlOutput` etc, so provide a
     # shim re-exporting pywayland's own wayland bindings.

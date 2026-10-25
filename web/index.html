@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#12090d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>omadesk</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/192.png">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<div id="app">
+  <!-- landing / stage switch -->
+  <section id="landing" class="stage">
+    <div class="card">
+      <div class="logo"><span class="o">oma</span>desk</div>
+      <p class="tag">Your Omarchy desktop, in your pocket.</p>
+      <div id="connStatus" class="status idle">idle</div>
+      <button id="connectBtn" class="primary">Connect</button>
+      <div class="row">
+        <select id="outputSel" class="ghost"></select>
+        <select id="qualitySel" class="ghost">
+          <option value="1">~1 Mbps</option>
+          <option value="3" selected>~3 Mbps</option>
+          <option value="6">~6 Mbps</option>
+          <option value="10">~10 Mbps</option>
+        </select>
+      </div>
+      <details class="help">
+        <summary>What is the token?</summary>
+        <p>omadesk prints a QR + URL on the desktop. The part after <code>#</code> in that URL is the token — it authorizes this very browser and stays on this device.</p>
+      </details>
+      <details class="help">
+        <summary>Installing as an app</summary>
+        <p>Open in Chrome → menu → <strong>Add to Home screen</strong>. Over the internet use Tailscale (this desktop runs it) and open <code>http://&lt;tailscale-host&gt;:9983/&lt;#token&gt;</code>.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- viewer stage -->
+  <section id="viewer" class="stage hidden">
+    <div id="videoWrap">
+      <video id="video" autoplay playsinline muted></video>
+      <div id="cursor" class="hidden"></div>
+    </div>
+    <audio id="audio" autoplay playsinline></audio>
+
+    <!-- top bar -->
+    <div id="topbar">
+      <button id="backBtn" class="tbtn" title="Back">‹</button>
+      <div id="stats" class="stats">– fps</div>
+      <div class="spacer"></div>
+      <button id="audioBtn" class="tbtn" title="PC sound on/off">🔊</button>
+      <button id="modeBtn" class="tbtn" title="Gestures: tap/drag or scroll">🖱️</button>
+      <button id="deskBtn" class="tbtn" title="Switch desktop">🗂</button>
+      <button id="winBtn" class="tbtn" title="Windows">🪟</button>
+      <button id="keyboardBtn" class="tbtn" title="Type with phone keyboard">⌨</button>
+      <button id="fullscreenBtn" class="tbtn" title="Fullscreen">⛶</button>
+    </div>
+
+    <!-- desktops bar -->
+    <div id="deskBar" class="sheet hidden">
+      <div class="srow">
+        <button id="wsPrev" class="chip" title="Previous desktop">◀</button>
+        <div id="wsChips" class="chips"></div>
+        <button id="wsNext" class="chip" title="Next desktop">▶</button>
+        <button id="wsFormer" class="chip" title="Back to previous desktop (A/B)">↩</button>
+      </div>
+    </div>
+
+    <!-- windows sheet -->
+    <div id="winSheet" class="sheet hidden">
+      <div id="winList" class="wlist"></div>
+    </div>
+
+    <!-- virtual keys row -->
+    <div id="keyRow">
+      <button class="kbtn mod" data-mod="ctrl">Ctrl</button>
+      <button class="kbtn mod" data-mod="alt">Alt</button>
+      <button class="kbtn mod" data-mod="super">⌘</button>
+      <button class="kbtn" data-key="Escape">Esc</button>
+      <button class="kbtn" data-key="Tab">Tab</button>
+      <button class="kbtn" data-key="ArrowLeft">←</button>
+      <button class="kbtn" data-key="ArrowUp">↑</button>
+      <button class="kbtn" data-key="ArrowDown">↓</button>
+      <button class="kbtn" data-key="ArrowRight">→</button>
+      <button class="kbtn" data-key="PageUp">PgUp</button>
+      <button class="kbtn" data-key="PageDown">PgDn</button>
+      <button class="kbtn" data-key="Home">Home</button>
+      <button class="kbtn" data-key="End">End</button>
+      <button class="kbtn" data-mouse="middle" title="Middle click">🖱</button>
+      <button id="altTabBtn" class="kbtn" title="Alt+Tab (next window)">⇥W</button>
+      <button class="kbtn" data-key="Return">↵</button>
+      <button id="clipPasteBtn" class="kbtn" title="Send clipboard text to PC">Paste</button>
+    </div>
+
+    <textarea id="ime" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false"
+              placeholder=""></textarea>
+  </section>
+</div>
+
+<div id="banner" class="hidden"><span id="bannerText"></span></div>
+<script src="/app.js"></script>
+</body>
+</html>

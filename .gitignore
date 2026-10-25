@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+omadesk/protocol_gen/
+*.log
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
+*.apk
+*.jks
+*.keystore

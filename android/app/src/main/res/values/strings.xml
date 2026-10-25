@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">omadesk</string>
+    <string name="connect">Connect</string>
+    <string name="bad_url">That URL does not look right</string>
+</resources>

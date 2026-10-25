@@ -85,6 +85,21 @@ omadesk/
                       test_e2e_server.py, kb_spy.py, micro*.py, poc_*.py
 ```
 
+## 🤖 Building the Android APK
+
+The build workflow ships as `ci/build-apk.yml.disabled` (GitHub rejects pushes
+with workflow files unless the CLI has the `workflow` scope). One-time activation:
+
+```sh
+gh auth refresh -h github.com -s workflow   # opens a device-code login once
+git mv ci/build-apk.yml.disabled .github/workflows/build-apk.yml
+git commit -m "activate APK build" && git push
+```
+
+After that every push to `main` (and any `v*` tag) builds the APK:
+**Actions → build-android-apk → Artifacts → omadesk-apk** (or the Releases page,
+for tags). Local build alternative: `cd android && gradle assembleDebug`.
+
 ## Android app
 
 `android/` holds a tiny WebView wrapper (no Android deps → small APK):

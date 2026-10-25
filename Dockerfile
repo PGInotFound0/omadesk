@@ -27,6 +27,7 @@ LABEL org.opencontainers.image.title="omadesk" \
 RUN apt-get update && apt-get install -y --no-install-recommends \
         pipewire-audio \
         pulseaudio-utils \
+        pkg-config \
         wl-clipboard \
         tini \
         gcc \

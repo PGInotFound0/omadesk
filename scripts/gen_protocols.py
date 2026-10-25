@@ -35,8 +35,6 @@ def main() -> None:
     # (wl_output, wl_keyboard, ...) — see pywayland scanner docs
     wayland_xml = "/usr/share/wayland/wayland.xml"
     if not os.path.exists(wayland_xml):
-        import subprocess
-
         try:
             wayland_xml = subprocess.check_output(
                 ["pkg-config", "--variable=pkgdatadir", "wayland-scanner"], text=True
